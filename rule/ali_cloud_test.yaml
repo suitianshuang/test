@@ -1,24 +1,23 @@
 # rule/sample_rule.yaml
 rule:
-  name: "SQL Injection Prevention"
+  name: "阿里云-RAM-RAM User拥有大权限但无调用来源ACL"
   description: |
-    检测未经验证的 SQL 查询参数，
-    防止恶意输入导致 SQL 注入攻击
-  severity: "high"  # 可选字段：规则严重等级
-  category: "security"
-  detection:
-    pattern: "SELECT.*FROM.*WHERE.*\\$\\{.*\\}"  # 检测正则表达式
-    language: "sql"                              # 目标语言
-  fixes:
-    - step: 1
-      description: "使用预编译语句 (PreparedStatement)"
-      example: |
-        String query = "SELECT * FROM users WHERE id = ?";
-        PreparedStatement stmt = connection.prepareStatement(query);
-        stmt.setInt(1, userInput);
-    - step: 2
-      description: "启用 ORM 框架参数化"
-      example: "User.find(:id => params[:id])"
-  references:
-    - "OWASP SQL Injection Guide: https://owasp.org/www-community/attacks/SQL_Injection"
-    - "CWE-89: https://cwe.mitre.org/data/definitions/89.html"
+    拥有 AliyunRAMFullAccess、AdministratorAccess权限的RAM User没有设置调用来源ACL
+  level: "high"  # 可选字段：规则严重等级
+  category: "身份安全"
+  advice: "设置访问控制ACL"
+  link: "https://example.com/sql-injection-prevention"
+  rego: |
+    package ram_user_with_high_risk_access_has_no_acl
+    import rego.v1
+  
+    default risk := false
+    risk if {
+      exist_AccessKey
+      exist_Policies != null
+      without_network_acl
+      tmp_white
+    }
+      tmp_white if {
+        not input.UserDetail.UserName in data.control_user_name_list.ram_user_name
+    }
