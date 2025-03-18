@@ -1,6 +1,9 @@
 # rule/sample_rule.yaml
 rule:
+  platform: "ALI_CLOUD"
+  resourceType: "RAM User"
   name: "阿里云-RAM-RAM User拥有大权限但无调用来源ACL"
+  code: "ali_cloud_ram_no_acl"
   description: |
     拥有 AliyunRAMFullAccess、AdministratorAccess权限的RAM User没有设置调用来源ACL
   level: "high"  # 可选字段：规则严重等级
@@ -10,7 +13,7 @@ rule:
   rego: |
     package ram_user_with_high_risk_access_has_no_acl
     import rego.v1
-  
+    
     default risk := false
     risk if {
       exist_AccessKey
