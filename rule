@@ -1,0 +1,24 @@
+# rule/sample_rule.yaml
+rule:
+  name: "SQL Injection Prevention"
+  description: |
+    检测未经验证的 SQL 查询参数，
+    防止恶意输入导致 SQL 注入攻击
+  severity: "high"  # 可选字段：规则严重等级
+  category: "security"
+  detection:
+    pattern: "SELECT.*FROM.*WHERE.*\\$\\{.*\\}"  # 检测正则表达式
+    language: "sql"                              # 目标语言
+  fixes:
+    - step: 1
+      description: "使用预编译语句 (PreparedStatement)"
+      example: |
+        String query = "SELECT * FROM users WHERE id = ?";
+        PreparedStatement stmt = connection.prepareStatement(query);
+        stmt.setInt(1, userInput);
+    - step: 2
+      description: "启用 ORM 框架参数化"
+      example: "User.find(:id => params[:id])"
+  references:
+    - "OWASP SQL Injection Guide: https://owasp.org/www-community/attacks/SQL_Injection"
+    - "CWE-89: https://cwe.mitre.org/data/definitions/89.html"
