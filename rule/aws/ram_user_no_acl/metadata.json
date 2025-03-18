@@ -1,11 +1,13 @@
 {
-  "platform": "ALI_CLOUD",
+  "platform": "AWS",
   "resourceType": "RAM User",
   "name": "阿里云-RAM-RAM User拥有大权限但无调用来源ACL",
-  "code": "ali_cloud_ram_no_acl",
+  "code": "ali_cloud_ram_no_acl1",
   "description": "拥有 AliyunRAMFullAccess、AdministratorAccess权限的RAM User没有设置调用来源ACL",
   "level": "high",
-  "category": "身份安全",
+  "categoryList": [
+    "身份安全"
+  ],
   "advice": "设置访问控制ACL",
   "link": "https://example.com/sql-injection-prevention"
 }
